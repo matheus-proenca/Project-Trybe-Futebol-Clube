@@ -23,6 +23,15 @@ class ServiceTeams {
     const teamsJson = findAllTeams.map((e) => e.toJSON());
     return { status: 200, data: teamsJson };
   };
+
+  getTeamById = async (id: string):Promise<ServiceStatus<Team | undefined>> => {
+    const findById = await TeamsModel.findByPk(id);
+    console.log(id);
+    if (!findById) {
+      return { status: 402, data: { message: 'Time inexistente' } };
+    }
+    return { status: 200, data: findById };
+  };
 }
 
 export default ServiceTeams;

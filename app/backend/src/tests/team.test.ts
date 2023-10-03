@@ -45,4 +45,10 @@ describe('Teams test', () => {
     expect(response.status).to.be.equal(200)
     expect(response.body).to.be.an('array')
   });
+  it('testando se recebe o time pelo id', async () => {
+    const response = await chai.request(app).get('/teams/1')
+
+    expect(response.status).to.be.equal(200)
+    expect(response.body).to.be.an('object')
+  })
 });
