@@ -5,7 +5,7 @@ FROM node:16.14-alpine
 WORKDIR /app-backend
 
 # Copiar os package.json, package-lock.json e packages.npm para o container
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 # Instalar as dependências Node
 RUN npm install
@@ -17,7 +17,6 @@ COPY . .
 EXPOSE 3001
 
 # Configurar os comandos para iniciar a aplicação de acordo com as boas práticas
-ENTRYPOINT [ "npm" ]
-
-CMD [ "start" ]
+RUN ["npm", "run", "build"]
+CMD ["npm", "run", "db:reset"]
 # Dica: Leia a seção Docker e Docker-compose no README para mais informações
