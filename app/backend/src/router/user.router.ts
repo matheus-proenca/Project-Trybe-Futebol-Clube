@@ -7,6 +7,7 @@ const userService = new UserService();
 const userController = new UserController(userService);
 
 const userRoute = express.Router();
-userRoute.post('/login', UserValidation.loginValidation, userController.login);
+userRoute.post('/', UserValidation.loginValidation, userController.login);
+userRoute.get('/role', UserValidation.tokenValidation, userController.getRole);
 
 export default userRoute;

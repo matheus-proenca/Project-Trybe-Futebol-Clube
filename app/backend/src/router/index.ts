@@ -5,6 +5,6 @@ import userRoute from './user.router';
 const route = express.Router();
 
 route.use('/teams', teamRoute);
-route.use('/user', userRoute);
+route.use('/login', userRoute);
 
 export default route;
