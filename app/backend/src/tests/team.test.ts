@@ -7,6 +7,7 @@ import { app } from '../app';
 import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
+import TeamsModel from '../database/models/TeamsModel';
 
 chai.use(chaiHttp);
 
@@ -38,14 +39,25 @@ describe('Teams test', () => {
 
   //   expect(...)
   // });
+  afterEach(() => {
+    sinon.restore
+  })
 
   it('testando se recebe todos os times ', async () => {
+    sinon.stub(TeamsModel, 'findAll').resolves(TeamsModel.bulkBuild([{
+      id: 1,
+      teamName: "Vasco"
+    }]))
     const response = await chai.request(app).get('/teams')
 
     expect(response.status).to.be.equal(200)
     expect(response.body).to.be.an('array')
   });
   it('testando se recebe o time pelo id', async () => {
+    sinon.stub(TeamsModel, 'findByPk').resolves(TeamsModel.build({
+      id: 1,
+      teamName: "Vasco"
+    }))
     const response = await chai.request(app).get('/teams/1')
 
     expect(response.status).to.be.equal(200)

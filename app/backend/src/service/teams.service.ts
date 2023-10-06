@@ -20,8 +20,7 @@ type ServiceStatus<T> = ServiceError | ServiceSucesseful<T>;
 class ServiceTeams {
   getAllTeams = async ():Promise<ServiceStatus<Team[]>> => {
     const findAllTeams = await TeamsModel.findAll();
-    const teamsJson = findAllTeams.map((e) => e.toJSON());
-    return { status: 200, data: teamsJson };
+    return { status: 200, data: findAllTeams };
   };
 
   getTeamById = async (id: string):Promise<ServiceStatus<Team | undefined>> => {
