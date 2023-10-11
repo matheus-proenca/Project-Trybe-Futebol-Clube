@@ -6,8 +6,14 @@ class MatchesController {
     private matchesService:MatchesSevice,
   ) {}
 
-  public getMatches:RequestHandler = async (_req, res) => {
-    const { status, data } = await this.matchesService.getMatches();
+  public getMatches:RequestHandler = async (req, res) => {
+    const { inProgress } = req.query;
+    if (!inProgress) {
+      const { status, data } = await this.matchesService.getMatches();
+      return res.status(status).json(data);
+    }
+    const { status, data } = await this.matchesService
+      .getMatchesInProgress(inProgress.toString());
     res.status(status).json(data);
   };
 }
