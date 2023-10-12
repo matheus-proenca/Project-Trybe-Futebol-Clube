@@ -79,6 +79,22 @@ class MatchesSevice {
       status: 200, data: { message: 'updated result' },
     };
   };
+
+  public createMatches =
+  async (homeTeamId:number, homeTeamGoals:number, awayTeamId:number, awayTeamGoals:number)
+  :Promise<ServiceStatus<Matches>> => {
+    if (homeTeamId === awayTeamId) {
+      return { status: 422,
+        data: { message: 'It is not possible to create a match with two equal teams' } };
+    }
+    const findTeams = await MatchesModel.findAll({ where: { homeTeamId, awayTeamId } });
+    if (findTeams.length <= 1) {
+      return { status: 404, data: { message: 'There is no team with such id!' } };
+    }
+    const createMatch = await MatchesModel.create({
+      homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress: true });
+    return { status: 201, data: createMatch };
+  };
 }
 
 export default MatchesSevice;
