@@ -63,4 +63,15 @@ describe('Teams test', () => {
     expect(response.status).to.be.equal(200)
     expect(response.body).to.be.an('object')
   })
+  it('testa se não encontra o time com um id inexistente', async () => {
+    sinon.stub(TeamsModel, 'findByPk').resolves(TeamsModel.build({
+      id: 1,
+      teamName: "Vasco"
+    }))
+    const response = await chai.request(app).get('/teams/67')
+    const message = 'Team not found'
+
+    expect(response.status).to.be.equal(404)
+    expect(response.body).to.be.deep.equal(message)
+  })
 });

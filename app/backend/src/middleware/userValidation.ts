@@ -4,18 +4,12 @@ import * as jwt from 'jsonwebtoken';
 class UserValidation {
   static loginValidation:RequestHandler = (req, res, next) => {
     const { email, password } = req.body;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /\S+@\S+\.\S+/;
     const test = emailRegex.test(email);
-    if (!email) {
+    if (!email || !password) {
       return res.status(400).json({ message: 'All fields must be filled' });
     }
-    if (!password) {
-      return res.status(400).json({ message: 'All fields must be filled' });
-    }
-    if (!test) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-    if (password.length < 6) {
+    if (!test || password.length < 6) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
     next();
@@ -29,9 +23,6 @@ class UserValidation {
     try {
       const token = authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-      if (!decoded) {
-        return res.status(401).json({ message: 'Token must be a valid token' });
-      }
       req.body = decoded;
       next();
     } catch (error) {
