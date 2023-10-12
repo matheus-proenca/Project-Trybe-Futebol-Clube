@@ -8,12 +8,13 @@ import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
 import TeamsModel from '../database/models/TeamsModel';
+import MatchesModel from '../database/models/MatchesModel';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Teams test', () => {
+describe('Matches test', () => {
   /**
    * Exemplo do uso de stubs com tipos
    */
@@ -43,28 +44,27 @@ describe('Teams test', () => {
     sinon.restore
   })
 
-  it('testando se recebe todos os times ', async () => {
-    sinon.stub(TeamsModel, 'findAll').resolves(TeamsModel.bulkBuild([{
-      id: 1,
-      teamName: "Vasco"
-    }]))
-    const response = await chai.request(app).get('/teams')
+  const matches =
+  {
+    id: 1,
+    homeTeamId: 16,
+    homeTeamGoals: 1,
+    awayTeamId: 8,
+    awayTeamGoals: 1,
+    inProgress: false,
+    homeTeam: {
+      teamName: "São Paulo"
+    },
+    awayTeam: {
+      teamName: "Grêmio"
+    }
+  }
+
+  it('testando se recebe todas a partidas ', async () => {
+    sinon.stub(MatchesModel, 'findAll').resolves(MatchesModel.bulkBuild([matches]))
+    const response = await chai.request(app).get('/matches')
 
     expect(response.status).to.be.equal(200)
     expect(response.body).to.be.an('array')
   });
-  it('testando se recebe o time pelo id', async () => {
-    sinon.stub(TeamsModel, 'findByPk').resolves(TeamsModel.build({
-      id: 1,
-      teamName: "Vasco"
-    }))
-    const response = await chai.request(app).get('/teams/1')
-
-    expect(response.status).to.be.equal(200)
-    expect(response.body).to.be.an('object')
-    expect(response.body).to.be.deep.equal({
-      id: 1,
-      teamName: "Vasco"
-    })
-  })
 });
