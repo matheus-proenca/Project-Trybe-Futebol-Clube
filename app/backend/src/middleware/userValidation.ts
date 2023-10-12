@@ -16,17 +16,17 @@ class UserValidation {
   };
 
   static tokenValidation: RequestHandler = (req, res, next) => {
-    const { authorization } = req.headers;
-    if (!authorization) {
-      return res.status(401).json({ message: 'Token not found' });
-    }
     try {
+      const { authorization } = req.headers;
+      if (!authorization) {
+        return res.status(401).json({ message: 'Token not found' });
+      }
       const token = authorization.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'pass-word');
       req.body = decoded;
       next();
     } catch (error) {
-      res.status(401).json({ message: 'Token must be a valid token' });
+      return res.status(401).json({ message: 'Token must be a valid token' });
     }
   };
 }

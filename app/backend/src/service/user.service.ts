@@ -15,7 +15,7 @@ type ServiceSucesseful<T> = {
 type ServiceStatus<T> = ServiceError | ServiceSucesseful<T>;
 
 class UserService {
-  public login = async (email:string, password:string):
+  static login = async (email:string, password:string):
   Promise<ServiceStatus<{ token:string }>> => {
     const user = await UsersModel.findOne({ where: { email } });
     if (!user) {
@@ -25,9 +25,13 @@ class UserService {
     if (!passwordValid) {
       return { status: 400, data: { message: 'Invalid email or password' } };
     }
-    const token = jwt.sign({
-      email: user.email,
-    }, process.env.JWT_SECRET || 'pass-Word');
+    const token = jwt.sign(
+      {
+        email: user.email, username: user.username, role: user.role,
+      },
+      process.env.JWT_SECRET || 'pass-word',
+      { algorithm: 'HS256', expiresIn: '4h' },
+    );
     return { status: 200, data: { token } };
   };
 }
