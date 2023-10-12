@@ -62,6 +62,23 @@ class MatchesSevice {
     return {
       status: 200, data: { message: 'Finished' } };
   };
+
+  public resultsMatchUpdate = async (id:string, homeGoal:number, awayGoal:number)
+  :Promise<ServiceError> => {
+    const findMatchById = await MatchesModel.findByPk(id);
+    if (!findMatchById) {
+      return {
+        status: 400, data: { message: 'match not found' },
+      };
+    }
+    await findMatchById.update({
+      homeTeamGoals: homeGoal,
+      awayTeamGoals: awayGoal,
+    });
+    return {
+      status: 200, data: { message: 'updated result' },
+    };
+  };
 }
 
 export default MatchesSevice;

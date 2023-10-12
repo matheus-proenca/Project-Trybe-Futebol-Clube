@@ -22,6 +22,14 @@ class MatchesController {
     const { status, data } = await this.matchesService.finishMatch(id);
     res.status(status).json(data);
   };
+
+  public updateMatch:RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const { status, data } = await this.matchesService
+      .resultsMatchUpdate(id, homeTeamGoals, awayTeamGoals);
+    res.status(status).json(data);
+  };
 }
 
 export default MatchesController;

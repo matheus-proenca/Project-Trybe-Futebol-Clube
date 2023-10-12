@@ -10,5 +10,6 @@ const matchesRoute = express.Router();
 
 matchesRoute.get('/', matchescontroller.getMatches);
 matchesRoute.patch('/:id/finish', UserValidation.tokenValidation, matchescontroller.finishMatches);
+matchesRoute.patch(':id', UserValidation.tokenValidation, matchescontroller.updateMatch);
 
 export default matchesRoute;
