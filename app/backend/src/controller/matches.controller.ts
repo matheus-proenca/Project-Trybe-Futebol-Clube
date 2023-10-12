@@ -16,6 +16,12 @@ class MatchesController {
       .getMatchesInProgress(inProgress.toString());
     res.status(status).json(data);
   };
+
+  public finishMatches:RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    const { status, data } = await this.matchesService.finishMatch(id);
+    res.status(status).json(data);
+  };
 }
 
 export default MatchesController;

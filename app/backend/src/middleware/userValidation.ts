@@ -15,7 +15,7 @@ class UserValidation {
     if (!test) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-    if (password.length <= 6) {
+    if (password.length < 6) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
     next();
@@ -30,12 +30,12 @@ class UserValidation {
       const token = authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
       if (!decoded) {
-        return res.status(401).json({ message: 'Expired or invalid token' });
+        return res.status(401).json({ message: 'Token must be a valid token' });
       }
       req.body = decoded;
       next();
     } catch (error) {
-      res.status(401).json({ message: 'Expired or invalid token' });
+      res.status(401).json({ message: 'Token must be a valid token' });
     }
   };
 }

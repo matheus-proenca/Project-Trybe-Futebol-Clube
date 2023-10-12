@@ -1,6 +1,7 @@
 import * as express from 'express';
 import MatchesController from '../controller/matches.controller';
 import MatchesSevice from '../service/matches.service';
+import UserValidation from '../middleware/userValidation';
 
 const matchetservice = new MatchesSevice();
 const matchescontroller = new MatchesController(matchetservice);
@@ -8,5 +9,6 @@ const matchescontroller = new MatchesController(matchetservice);
 const matchesRoute = express.Router();
 
 matchesRoute.get('/', matchescontroller.getMatches);
+matchesRoute.patch('/:id/finish', UserValidation.tokenValidation, matchescontroller.finishMatches);
 
 export default matchesRoute;

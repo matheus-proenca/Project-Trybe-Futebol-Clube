@@ -51,6 +51,17 @@ class MatchesSevice {
     });
     return { status: 200, data: matches };
   };
+
+  public finishMatch = async (id:string): Promise<ServiceError> => {
+    const findMatchById = await MatchesModel.findByPk(id);
+    if (!findMatchById) {
+      return {
+        status: 400, data: { message: 'match not found' } };
+    }
+    await findMatchById.update({ inProgress: false });
+    return {
+      status: 200, data: { message: 'Finished' } };
+  };
 }
 
 export default MatchesSevice;
