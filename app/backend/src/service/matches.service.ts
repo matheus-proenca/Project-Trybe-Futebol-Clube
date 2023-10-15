@@ -52,7 +52,7 @@ class MatchesSevice {
     return { status: 200, data: matches };
   };
 
-  public finishMatch = async (id:string): Promise<ServiceError> => {
+  public finishMatch = async (id:string): Promise<ServiceStatus<Matches>> => {
     const findMatchById = await MatchesModel.findByPk(id);
     if (!findMatchById) {
       return {
@@ -60,11 +60,11 @@ class MatchesSevice {
     }
     await findMatchById.update({ inProgress: false });
     return {
-      status: 200, data: { message: 'Finished' } };
+      status: 200, data: findMatchById };
   };
 
   public resultsMatchUpdate = async (id:string, homeGoal:number, awayGoal:number)
-  :Promise<ServiceError> => {
+  :Promise<ServiceStatus<Matches>> => {
     const findMatchById = await MatchesModel.findByPk(id);
     if (!findMatchById) {
       return {
@@ -76,7 +76,7 @@ class MatchesSevice {
       awayTeamGoals: awayGoal,
     });
     return {
-      status: 200, data: { message: 'updated result' },
+      status: 200, data: findMatchById,
     };
   };
 
@@ -88,7 +88,7 @@ class MatchesSevice {
         data: { message: 'It is not possible to create a match with two equal teams' } };
     }
     const findTeams = await MatchesModel.findAll({ where: { homeTeamId, awayTeamId } });
-    if (findTeams.length <= 1) {
+    if (findTeams.length < 2) {
       return { status: 404, data: { message: 'There is no team with such id!' } };
     }
     const createMatch = await MatchesModel.create({

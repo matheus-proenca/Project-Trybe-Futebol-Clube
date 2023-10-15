@@ -15,19 +15,20 @@ type ServiceSucesseful<T> = {
 type ServiceStatus<T> = ServiceError | ServiceSucesseful<T>;
 
 class UserService {
-  static login = async (email:string, password:string):
+  static login = async (emails:string, password:string):
   Promise<ServiceStatus<{ token:string }>> => {
-    const user = await UsersModel.findOne({ where: { email } });
+    const user = await UsersModel.findOne({ where: { email: emails } });
     if (!user) {
-      return { status: 400, data: { message: 'Invalid email or password' } };
+      return { status: 401, data: { message: 'Invalid email or password' } };
     }
     const passwordValid = await bcrypt.compare(password, user.password);
     if (!passwordValid) {
-      return { status: 400, data: { message: 'Invalid email or password' } };
+      return { status: 401, data: { message: 'Invalid email or password' } };
     }
+    const { email, username, role } = user.toJSON();
     const token = jwt.sign(
       {
-        email: user.email, username: user.username, role: user.role,
+        email, username, role,
       },
       process.env.JWT_SECRET || 'pass-word',
       { algorithm: 'HS256', expiresIn: '4h' },

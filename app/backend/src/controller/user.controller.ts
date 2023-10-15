@@ -10,7 +10,6 @@ class UserController {
 
   public getRole:RequestHandler = async (req, res) => {
     const { role } = req.body;
-    console.log(role);
     res.status(200).json(role);
   };
 }
