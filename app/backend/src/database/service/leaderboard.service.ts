@@ -40,9 +40,10 @@ class LeaderboardSevice {
       ],
     });
     const matchResult = await this.results(match.map((e) => e.toJSON()));
-    const desempate = matchResult.results.sort((a, b) => b.totalVictories - a.totalVictories
+    const desempate = matchResult.results.sort((a, b) => b.totalPoints - a.totalPoints
       || b.goalsBalance - a.goalsBalance
-      || b.goalsFavor - a.goalsFavor);
+      || b.goalsFavor - a.goalsFavor
+      || b.totalVictories - a.totalVictories);
     return { status: 200, data: desempate };
   };
 }
