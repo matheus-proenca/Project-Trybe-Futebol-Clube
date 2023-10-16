@@ -1,4 +1,5 @@
 import MatchesModel from '../models/MatchesModel';
+import TeamsModel from '../models/TeamsModel';
 
 type Matches = {
   homeTeamId: number;
@@ -83,13 +84,12 @@ class MatchesSevice {
   public createMatches =
   async (homeTeamId:number, homeTeamGoals:number, awayTeamId:number, awayTeamGoals:number)
   :Promise<ServiceStatus<Matches>> => {
-    console.log(homeTeamId, awayTeamId);
     if (homeTeamId === awayTeamId) {
       return { status: 422,
         data: { message: 'It is not possible to create a match with two equal teams' } };
     }
-    const findTeams = await MatchesModel.findAll({ where: { homeTeamId, awayTeamId } });
-    if (findTeams.length <= 1) {
+    const findTeams = await TeamsModel.findAll({ where: { id: [homeTeamId, awayTeamId] } });
+    if (findTeams.length < 2) {
       return { status: 404, data: { message: 'There is no team with such id!' } };
     }
     const createMatch = await MatchesModel.create({

@@ -6,6 +6,7 @@ type teamHome = {
   id:number
   teamName:string
   teamHome:[{
+    id: number;
     homeTeamId: number,
     homeTeamGoals: number,
     awayTeamId: number,
@@ -17,26 +18,32 @@ type teamHome = {
 class LeaderboardSevice {
   public results = async (teamMatch:teamHome[]) => {
     const finalResult = teamMatch.map((e) => {
+      console.log(e.teamHome);
       const teamsHome = new Leaderboard(e.id, e.teamName, e.teamHome);
       teamsHome.teamPeformance();
       teamsHome.goalsTotal();
       teamsHome.efficiencyTotal();
+
       return teamsHome.homeTeam;
     });
-    return finalResult.sort();
+    return { results: finalResult };
   };
 
   public getResultsTeamHome = async () => {
     const match = await TeamsModel.findAll({
       include: [
         {
-          where: { inProgress: false },
           model: MatchesModel,
           as: 'teamHome',
+          where: { inProgress: false },
         },
       ],
     });
-    return { status: 200, data: this.results(match.map((e) => e.toJSON())) };
+    const matchResult = await this.results(match.map((e) => e.toJSON()));
+    const desempate = matchResult.results.sort((a, b) => b.totalVictories - a.totalVictories
+      || b.goalsBalance - a.goalsBalance
+      || b.goalsFavor - a.goalsFavor);
+    return { status: 200, data: desempate };
   };
 }
 

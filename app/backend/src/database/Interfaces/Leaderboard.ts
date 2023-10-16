@@ -46,7 +46,7 @@ class Leaderboard {
     if (goalsFavor > goalsOwn) {
       this.totalPoint += 3;
       this.totalVictore += 1;
-    } else if (goalsFavor === goalsOwn) {
+    } else if (goalsFavor < goalsOwn) {
       this.totalLoss += 1;
     } else {
       this.totalPoint += 1;
@@ -70,8 +70,8 @@ class Leaderboard {
         this.goalOwn += e.awayTeamGoals;
       } else if (e.homeTeamId !== this.ids) {
         this.results(e.awayTeamGoals, e.homeTeamGoals);
-        this.goalFavor += e.homeTeamGoals;
-        this.goalOwn += e.awayTeamGoals;
+        this.goalFavor += e.awayTeamGoals;
+        this.goalOwn += e.homeTeamGoals;
       }
     });
   }

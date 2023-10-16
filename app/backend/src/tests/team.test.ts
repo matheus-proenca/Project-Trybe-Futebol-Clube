@@ -4,10 +4,9 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
-
-import { Response } from 'superagent';
 import TeamsModel from '../database/models/TeamsModel';
+import ServiceTeams from '../database/service/teams.service';
+import TeamController from '../database/controller/teams.controller';
 
 chai.use(chaiHttp);
 
@@ -52,6 +51,10 @@ describe('Teams test', () => {
 
     expect(response.status).to.be.equal(200)
     expect(response.body).to.be.an('array')
+    expect(response.body).to.be.deep.eq([{
+      id: 1,
+      teamName: "Vasco"
+    }])
   });
   it('testando se recebe o time pelo id', async () => {
     sinon.stub(TeamsModel, 'findByPk').resolves(TeamsModel.build({
@@ -62,6 +65,7 @@ describe('Teams test', () => {
 
     expect(response.status).to.be.equal(200)
     expect(response.body).to.be.an('object')
+    expect(response.body).haveOwnProperty('id')
     expect(response.body).to.be.deep.equal({
       id: 1,
       teamName: "Vasco"
