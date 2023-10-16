@@ -8,6 +8,7 @@ class LeaderboardController {
 
   public getLeaderboard:RequestHandler = async (_req, res) => {
     const { status, data } = await this.leaderboardService.getResultsTeamHome();
+    console.log(data);
     res.status(status).json(data);
   };
 }

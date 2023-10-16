@@ -9,8 +9,8 @@ class UserController {
   };
 
   public getRole:RequestHandler = async (req, res) => {
-    const { role } = req.body;
-    res.status(200).json(role);
+    const { role } = req.body.pass;
+    res.status(200).json({ role });
   };
 }
 

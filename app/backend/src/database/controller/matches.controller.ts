@@ -19,11 +19,11 @@ class MatchesController {
 
   public finishMatches:RequestHandler = async (req, res) => {
     const { id } = req.params;
-    const { status, data } = await this.matchesService.finishMatch(id);
+    const { status, data } = await this.matchesService.finishMatches(id);
     res.status(status).json(data);
   };
 
-  public updateMatch:RequestHandler = async (req, res) => {
+  public updateMatches:RequestHandler = async (req, res) => {
     const { id } = req.params;
     const { homeTeamGoals, awayTeamGoals } = req.body;
     const { status, data } = await this.matchesService
@@ -32,7 +32,8 @@ class MatchesController {
   };
 
   public createMatch:RequestHandler = async (req, res) => {
-    const { homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals } = req.body;
+    const { homeTeamId, awayTeamId,
+      homeTeamGoals, awayTeamGoals } = req.body;
     const { status, data } = await this.matchesService
       .createMatches(homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals);
     res.status(status).json(data);

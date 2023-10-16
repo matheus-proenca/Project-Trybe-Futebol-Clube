@@ -17,6 +17,8 @@ class Leaderboard {
   goalFavor = 0;
   goalOwn = 0;
   match:Matches[] = [];
+  efficiency = '';
+  goalsBalance = 0;
 
   constructor(id: number, name: string, matches: Matches[]) {
     this.names = name;
@@ -30,11 +32,13 @@ class Leaderboard {
       name: this.names,
       totalPoints: this.totalPoint,
       totalGames: this.totalGame,
-      totalVictores: this.totalVictore,
+      totalVictories: this.totalVictore,
       totalLosses: this.totalLoss,
       totalDraws: this.totalDraw,
       goalsFavor: this.goalFavor,
       goalsOwn: this.goalOwn,
+      goalsBalance: this.goalsBalance,
+      efficiency: this.efficiency,
     };
   }
 
@@ -50,16 +54,25 @@ class Leaderboard {
     }
   }
 
+  goalsTotal() {
+    this.goalsBalance = this.goalFavor - this.goalOwn;
+  }
+
+  efficiencyTotal() {
+    this.efficiency = ((this.totalPoint / (this.totalGame * 3)) * 100).toFixed(2);
+  }
+
   teamPeformance() {
     this.match.forEach((e) => {
       if (e.homeTeamId === this.ids) {
         this.results(e.homeTeamGoals, e.awayTeamGoals);
         this.goalFavor += e.homeTeamGoals;
         this.goalOwn += e.awayTeamGoals;
+      } else if (e.homeTeamId !== this.ids) {
+        this.results(e.awayTeamGoals, e.homeTeamGoals);
+        this.goalFavor += e.homeTeamGoals;
+        this.goalOwn += e.awayTeamGoals;
       }
-      this.results(e.awayTeamGoals, e.homeTeamGoals);
-      this.goalFavor += e.homeTeamGoals;
-      this.goalOwn += e.awayTeamGoals;
     });
   }
 }

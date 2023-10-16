@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import UsersModel from '../database/models/UsersModel';
+import UsersModel from '../models/UsersModel';
 
 type ServiceError = {
   status: number,

@@ -1,6 +1,6 @@
-import MatchesModel from '../database/models/MatchesModel';
+import MatchesModel from '../models/MatchesModel';
 import Leaderboard from '../Interfaces/Leaderboard';
-import TeamsModel from '../database/models/TeamsModel';
+import TeamsModel from '../models/TeamsModel';
 
 type teamHome = {
   id:number
@@ -19,15 +19,18 @@ class LeaderboardSevice {
     const finalResult = teamMatch.map((e) => {
       const teamsHome = new Leaderboard(e.id, e.teamName, e.teamHome);
       teamsHome.teamPeformance();
-      return teamsHome.results;
+      teamsHome.goalsTotal();
+      teamsHome.efficiencyTotal();
+      return teamsHome.homeTeam;
     });
-    return finalResult;
+    return finalResult.sort();
   };
 
   public getResultsTeamHome = async () => {
     const match = await TeamsModel.findAll({
       include: [
         {
+          where: { inProgress: false },
           model: MatchesModel,
           as: 'teamHome',
         },

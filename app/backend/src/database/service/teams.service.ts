@@ -1,4 +1,4 @@
-import TeamsModel from '../database/models/TeamsModel';
+import TeamsModel from '../models/TeamsModel';
 
 type Team = {
   id: number,
